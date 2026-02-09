@@ -1,6 +1,8 @@
 // skyscrapers, small colorful pyramids, trees?, :w - a new comp
 
 import { useState } from "react";
+import testdata from '../data.json'
+import Pyramid from "../components/Brick";
 
 type DataActivity = {
     date: string;
@@ -11,15 +13,10 @@ type DataActivity = {
     };
 };
 
-function getColor(count: number) {
-    if(count == 0) return 'bg-red-100'
-    else return 'bg-black'
-}
-
 export default function ActivityPage() {
     const [leetcodeUN, setLeetcodeUN] = useState('');
     const [githubUN, setGithubUN] = useState('');
-    const [timeline, setTimeline] = useState<DataActivity[]>();
+    const [timeline, setTimeline] = useState<(DataActivity | null)[]>(testdata);
 
     const today = new Date();
     const oneYearAgo = new Date(today);
@@ -40,6 +37,7 @@ export default function ActivityPage() {
 
     async function handleSubmit(e) {
         e.preventDefault();
+
         const res = await fetch('http://localhost:7878/activity', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -90,14 +88,18 @@ export default function ActivityPage() {
             </form>
 
             {timeline && (
-                <div className="grid grid-flow-col grid-rows-7 gap-5">
-                    {timeline.map((item, i) => (
+                <div className="grid grid-flow-col grid-rows-7">
+                    {timeline.map((item, i) =>
                         item ? (
-                            <div key={i} className={`size-4 ${getColor(item.total)}`} />
+                            <div key={i}>
+                                <Pyramid count={item.total} />
+                            </div>
                         ) : (
-                            <div key={i}  />
+                            <div key={i}>
+                                <Pyramid count={0} />
+                            </div>
                         )
-                    ))}
+                    )}
                 </div>
             )}
         </div>
