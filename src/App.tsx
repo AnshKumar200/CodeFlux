@@ -4,11 +4,15 @@ import Footer from "./components/Footer";
 
 function App() {
     return (
-        <>
-            <Navbar />
+        <div className="text-2xl min-h-screen flex flex-col p-4">
+            <div className="flex justify-center">
+                <Navbar />
+            </div>
             <Outlet />
-            <Footer />
-        </>
+            <div className="mt-auto">
+                <Footer />
+            </div>
+        </div>
     )
 }
 
