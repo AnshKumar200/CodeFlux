@@ -56,7 +56,7 @@ export default function ActivityPage() {
             </form>
 
             {timeline && (
-                <div className="grid grid-flow-col grid-rows-7 w-fit gap-1 font-outfit font-medium">
+                <div className="grid grid-flow-col grid-rows-7 w-fit gap-1 font-medium">
                     {timeline.map((item, i) =>
                         item ? (
                             <div className="group flex">
