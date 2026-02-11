@@ -1,15 +1,22 @@
 import { useEffect, useRef } from 'react';
 
+type CellState = {
+    startTime: number;
+    duration: number;
+    color: string;
+};
+
 export default function GridEffect() {
-    const canvasRef = useRef(null);
-    const cellStatesRef = useRef({});
-    const animationRef = useRef(null);
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const cellStatesRef = useRef<Record<string, CellState>>({});
+    const animationRef = useRef<number | null>(null);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
         const ctx = canvas.getContext('2d');
+        if(!ctx) return;
         const dpr = window.devicePixelRatio || 1;
 
         canvas.width = window.innerWidth * dpr;
