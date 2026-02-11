@@ -3,8 +3,8 @@ import CubeAni from "../components/CubeAni";
 
 export default function HomePage() {
     return (
-        <div className="flex-1 flex flex-col items-center justify-end mb-10">
-            <CubeAni />
+        <div className="flex-1 flex flex-col justify-end mb-10">
+            <CubeAni dir='bt' />
             <div className="w-full flex flex-col gap-5">
                 <div className="text-7xl">Grind Grid</div>
                 <div className="flex flex-col gap-2">

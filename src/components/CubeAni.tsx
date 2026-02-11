@@ -1,11 +1,31 @@
-export default function CubeAni() {
-    return (
-        <div className="absolute top-0 right-50">
-            <div className="absolute inset-0 flex justify-center pointer-events-none">
-                <div className="w-0 border-r-2 border-dashed h-screen animate-trail" />
-            </div>
+export default function CubeAni({ dir }: { dir: string }) {
+    const blockAni =
+        dir === "tb" ? "animate-block-tb" :
+            dir === "bt" ? "animate-block-bt" :
+                dir === "rl" ? "animate-block-rl" :
+                    dir === "lr" ? "animate-block-lr" :
+                        "";
 
-            <div className="size-7 border-2 animate-block relative z-10 bg-white" />
+    const trailAni =
+        dir === "tb" ? "animate-trail-tb" :
+            dir === "bt" ? "animate-trail-bt" :
+                dir === "rl" ? "animate-trail-rl" :
+                    dir === "lr" ? "animate-trail-lr" :
+                        "";
+    const isVertical = dir === "tb" || dir === "bt";
+
+    return (
+        <div className="absolute top-0 left-0 -z-1">
+            {isVertical ? (
+                <div
+                    className={`absolute left-1/2 -translate-x-1/2 h-screen w-0 border-r-2 border-dashed ${trailAni}`}
+                />
+            ) : (
+                <div
+                    className={`absolute top-1/2 -translate-y-1/2 w-screen h-0 border-b-2 border-dashed ${trailAni}`}
+                />
+            )}
+            <div className={`relative size-7 border-2 z-10 bg-white ${blockAni}`} />
         </div>
     );
 }
