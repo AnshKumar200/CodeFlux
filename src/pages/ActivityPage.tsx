@@ -40,7 +40,7 @@ export default function ActivityPage() {
 
         const res = await fetch(`http://localhost:7878/activity?${params.toString()}`)
         const data = await res.json()
-        
+
         setLoading(false)
         setTimeline(data)
     }
