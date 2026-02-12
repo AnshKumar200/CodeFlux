@@ -11,6 +11,7 @@ import { IoCopyOutline } from "react-icons/io5";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import { BsActivity } from "react-icons/bs";
+import { backup } from "node:sqlite";
 
 export type DataActivity = {
     date: string;
@@ -67,7 +68,7 @@ export default function ActivityPage() {
         if (leetcodeUN) params.append("leetcode", leetcodeUN);
         if (codeforcesUN) params.append("codeforces", codeforcesUN);
 
-        const url = `${BsActivity}/heatmap?${params.toString()}`;
+        const url = `${BACKEND_URL}/heatmap?${params.toString()}`;
 
         try {
             await navigator.clipboard.writeText(url);
