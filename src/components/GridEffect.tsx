@@ -6,7 +6,7 @@ type CellState = {
     color: string;
 };
 
-export default function GridEffect() {
+export default function GridEffect({ blink }: { blink: boolean }) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const cellStatesRef = useRef<Record<string, CellState>>({});
     const animationRef = useRef<number | null>(null);
@@ -16,7 +16,7 @@ export default function GridEffect() {
         if (!canvas) return;
 
         const ctx = canvas.getContext('2d');
-        if(!ctx) return;
+        if (!ctx) return;
         const dpr = window.devicePixelRatio || 1;
 
         canvas.width = window.innerWidth * dpr;
@@ -36,7 +36,7 @@ export default function GridEffect() {
         const colors = ["#2262e3", "#dc2626", "#16a34a", "#ea580c", "#9333ea", "#0891b2"];
 
         const activateRandomCells = () => {
-            const numCells = Math.floor(Math.random() * 10) + 10;
+            const numCells = Math.floor(Math.random() * 10) + 20;
 
             for (let i = 0; i < numCells; i++) {
                 const randomCol = Math.floor(Math.random() * cols);
@@ -102,14 +102,18 @@ export default function GridEffect() {
 
         animate();
 
-        const interval = setInterval(activateRandomCells, colorChangeInterval);
+        let interval: number | null = null;
+        if (blink) {
+            interval = setInterval(activateRandomCells, colorChangeInterval);
+        }
+        else {
+            cellStatesRef.current = {};
+        }
         return () => {
-            clearInterval(interval);
-            if (animationRef.current) {
-                cancelAnimationFrame(animationRef.current);
-            }
+            if (interval) clearInterval(interval);
+            if (animationRef.current) cancelAnimationFrame(animationRef.current);
         };
-    }, []);
+    }, [blink]);
 
     return (
         <canvas

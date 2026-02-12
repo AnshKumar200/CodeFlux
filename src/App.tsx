@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 
 function App() {
     return (
-        <div className="text-2xl min-h-screen flex flex-col font-outfit p-4">
+        <div className="text-2xl min-h-screen flex flex-col font-outfit p-4 gap-5">
             <div className="flex justify-center z-2">
                 <Navbar />
             </div>

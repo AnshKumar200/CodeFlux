@@ -6,7 +6,7 @@ import { IoIosArrowForward } from "react-icons/io";
 export default function HomePage() {
     return (
         <div className="flex-1 flex flex-col justify-center p-30">
-            <GridEffect />
+            <GridEffect blink={true} />
             <div className="w-full flex flex-col gap-9 z-4">
                 <div>
                     <div className="absolute -translate-y-7 left-0">

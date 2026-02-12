@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { githubActivity } from "./services/github.js"
 import { leetcodeActivity } from "./services/leetcode.js";
+import { codeforcesActivity } from "./services/codeforces.js";
 dotenv.config();
 
 const PORT = process.env.PORT || '7878';
@@ -13,9 +14,9 @@ app.use(cors())
 
 
 app.get('/activity', async (req, res) => {
-    const { github, leetcode } = req.query;
+    const { github, leetcode, codeforces } = req.query;
 
-    if (!github && !leetcode) {
+    if (!github && !leetcode && !codeforces) {
         return res.status(400).json({
             error: 'at least one username is req'
         })
@@ -24,6 +25,7 @@ app.get('/activity', async (req, res) => {
     try {
         let gh: any = null;
         let lh: any = null;
+        let ch: any = null;
 
         const promise = [];
 
@@ -32,6 +34,9 @@ app.get('/activity', async (req, res) => {
         }
         if (leetcode && typeof leetcode === "string") {
             promise.push(leetcodeActivity(leetcode).then(data => lh = data))
+        }
+        if (codeforces && typeof codeforces === "string") {
+            promise.push(codeforcesActivity(codeforces).then(data => ch = data))
         }
 
         await Promise.all(promise);
@@ -46,6 +51,7 @@ app.get('/activity', async (req, res) => {
             platforms: {
                 github: number;
                 leetcode: number;
+                codeforces: number;
             };
         }>();
 
@@ -57,6 +63,7 @@ app.get('/activity', async (req, res) => {
                 platforms: {
                     github: 0,
                     leetcode: 0,
+                    codeforces: 0,
                 }
             })
         }
@@ -79,6 +86,15 @@ app.get('/activity', async (req, res) => {
                 entry.total += d.count;
             })
         }
+        if (ch) {
+            ch.days.forEach((d: any) => {
+                const entry = map.get(d.date);
+                if (!entry) return;
+
+                entry.platforms.codeforces = d.count;
+                entry.total += d.count;
+            })
+        }
 
         const timeline = Array.from(map.values());
 
@@ -92,9 +108,9 @@ app.get('/activity', async (req, res) => {
 })
 
 app.get('/heatmap', async (req, res) => {
-    const { github, leetcode } = req.query;
+    const { github, leetcode, codeforces } = req.query;
 
-    if (!github && !leetcode) {
+    if (!github && !leetcode && !codeforces) {
         return res.status(400).json({
             error: 'at least one username is req'
         })
@@ -103,6 +119,7 @@ app.get('/heatmap', async (req, res) => {
     try {
         let gh: any = null;
         let lh: any = null;
+        let ch: any = null;
 
         const promise = [];
 
@@ -111,6 +128,9 @@ app.get('/heatmap', async (req, res) => {
         }
         if (leetcode && typeof leetcode === "string") {
             promise.push(leetcodeActivity(leetcode).then(data => lh = data))
+        }
+        if (codeforces && typeof codeforces === "string") {
+            promise.push(codeforcesActivity(codeforces).then(data => ch = data))
         }
 
         await Promise.all(promise);
@@ -133,6 +153,11 @@ app.get('/heatmap', async (req, res) => {
         }
         if (lh) {
             lh.days.forEach((d: any) => {
+                map.set(d.date, (map.get(d.date) || 0) + d.count);
+            })
+        }
+        if (ch) {
+            ch.days.forEach((d: any) => {
                 map.set(d.date, (map.get(d.date) || 0) + d.count);
             })
         }
